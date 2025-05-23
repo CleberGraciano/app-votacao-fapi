@@ -126,8 +126,8 @@
   </div>
 
   <script>
-    const API_PARTICIPANTES = "http://localhost:8080/api/participantes";
-    const API_CATEGORIAS = "http://localhost:8080/api/categorias";
+    const API_PARTICIPANTES = "http://192.168.0.117:8080/api/participantes";
+    const API_CATEGORIAS = "http://192.168.0.117:8080/api/categorias";
 
     document.addEventListener("DOMContentLoaded", () => {
       carregarCategorias();
@@ -303,7 +303,7 @@
   </table>
 </div>
   <script>
-    const apiUrlCatego = 'http://localhost:8080/api/categorias';
+    const apiUrlCatego = 'http://192.168.0.117:8080/api/categorias';
 
     const form = document.getElementById('categoriaForm');
     const inputId = document.getElementById('categoriaId');
@@ -391,7 +391,7 @@
     // Excluir categoria
     function excluirCategoria(id) {
     if (confirm("Tem certeza que deseja excluir esta categoria?")) {
-        fetch(`http://localhost:8080/api/categorias/${id}`, {
+        fetch(`http://192.168.0.117:8080/api/categorias/${id}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -460,7 +460,7 @@
 </div>
 
 <script>
-  const apiUrlAvaliacao = "http://localhost:8080/api/tipos-avaliacao";
+  const apiUrlAvaliacao = "http://192.168.0.117:8080/api/tipos-avaliacao";
 
   document.getElementById("tipoForm").addEventListener("submit", function (e) {
     e.preventDefault();

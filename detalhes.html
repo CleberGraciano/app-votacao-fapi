@@ -155,13 +155,13 @@
   <button class="enviar" id="enviarNotas" onclick="voltarPagina()" >ENVIAR NOTAS</button>
 
   <script>
-    const tiposUrl = 'http://localhost:8080/api/tipos-avaliacao';
+    const tiposUrl = 'http://192.168.0.117:8080/api/tipos-avaliacao';
     const avaliacoesContainer = document.getElementById('avaliacoes');
     const botao  = document.getElementById('avaliacoes');
 
 
     const participanteId = getIdFromURL();
-    const participanteUrl = `http://localhost:8080/api/participantes/${participanteId}`;
+    const participanteUrl = `http://192.168.0.117:8080/api/participantes/${participanteId}`;
 
     const notasDisponiveis = [5, 6, 7, 8, 9, 10];
     const notasSelecionadas = {};
@@ -219,7 +219,7 @@
 
     async function enviarPontuacao(participanteId, notasSelecionadas) {
         console.log(notasSelecionadas);
-        const url = `http://localhost:8080/api/participantes/${participanteId}/pontuacoes`;
+        const url = `http://192.168.0.117:8080/api/participantes/${participanteId}/pontuacoes`;
 
         const payload = Object.entries(notasSelecionadas).map(([tipoAvaliacaoId, valor]) => ({
                 tipoAvaliacaoId,
