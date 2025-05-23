@@ -1,0 +1,103 @@
+<div class="container">
+  <h2 class="mt-4">Tipos de Avaliação</h2>
+
+  <!-- Formulário -->
+  <form id="tipoForm" class="row g-3 mt-3">
+    <input type="hidden" id="tipoId">
+    <div class="col-md-6">
+      <label for="nome" class="form-label">Nome</label>
+      <input type="text" class="form-control" id="nome" required>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <button type="button" class="btn btn-secondary" onclick="limparFormulario()">Cancelar</button>
+    </div>
+  </form>
+
+  <!-- Tabela -->
+  <table class="table table-bordered table-striped mt-4">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="tipoTabelaBody">
+      <!-- Preenchido por JS -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const apiUrlAvaliacao = "http://localhost:8080/api/tipos-avaliacao";
+
+  document.getElementById("tipoForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("tipoId").value;
+    const nome = document.getElementById("nome").value;
+
+    const tipo = { nome };
+
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `${apiUrlAvaliacao}/${id}` : apiUrlAvaliacao;
+
+    fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tipo)
+    })
+    .then(() => {
+      carregarTipos();
+      limparFormulario();
+    })
+    .catch(error => console.error("Erro ao salvar:", error));
+  });
+
+  function carregarTipos() {
+    fetch(apiUrlAvaliacao)
+      .then(res => res.json())
+      .then(data => {
+        const tabela = document.getElementById("tipoTabelaBody");
+        tabela.innerHTML = "";
+        data.forEach(tipo => {
+          tabela.innerHTML += `
+            <tr>
+              <td>${tipo.id}</td>
+              <td>${tipo.nome}</td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="editarTipo(${tipo.id})">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="excluirTipo(${tipo.id})">Excluir</button>
+              </td>
+            </tr>
+          `;
+        });
+      });
+  }
+
+  function editarTipo(id) {
+    fetch(`${apiUrlAvaliacao}/${id}`)
+      .then(res => res.json())
+      .then(tipo => {
+        document.getElementById("tipoId").value = tipo.id;
+        document.getElementById("nome").value = tipo.nome;
+      });
+  }
+
+  function excluirTipo(id) {
+    if (confirm("Deseja realmente excluir este tipo de avaliação?")) {
+      fetch(`${apiUrlAvaliacao}/${id}`, { method: 'DELETE' })
+        .then(() => carregarTipos())
+        .catch(error => alert("Erro ao excluir: " + error.message));
+    }
+  }
+
+  function limparFormulario() {
+    document.getElementById("tipoId").value = "";
+    document.getElementById("nome").value = "";
+  }
+
+  // Carregar dados ao abrir a tela
+  carregarTipos();
+</script>

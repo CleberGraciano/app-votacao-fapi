@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Avaliação</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+    }
+    #sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #343a40;
+      color: white;
+    }
+    #sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px;
+      display: block;
+    }
+    #sidebar a:hover {
+      background-color: #495057;
+    }
+    #content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+     <!-- Menu Lateral -->
+  <div id="sidebar">
+    <h4 class="p-3">Menu</h4>
+    <a href="#" onclick="mostrarPagina('participantes')">Cadastro de Participantes</a>
+    <a href="#" onclick="mostrarPagina('categorias')">Cadastro de Categorias</a>
+    <a href="#" onclick="mostrarPagina('avaliacoes')">Tipos de Avaliação</a>
+  </div>
+
+<div id="content">
+  <div id="pagina-conteudo"></div>
+</div>
+
+<script>
+  function mostrarPagina(pagina) {
+    const div = document.getElementById('pagina-conteudo');
+    
+    fetch(`${pagina}.html`)
+      .then(res => {
+        if (!res.ok) throw new Error("Página não encontrada");
+        return res.text();
+      })
+      .then(html => {
+        div.innerHTML = html;
+      })
+      .catch(err => {
+        div.innerHTML = "<p>Erro ao carregar a página.</p>";
+        console.error(err);
+      });
+  }
+
+  // Exibir Participantes por padrão
+  mostrarPagina('participantes');
+</script>
+

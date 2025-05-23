@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Participantes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+  <style>
+    body {
+      font-family:"Montserrat", sans-serif;
+    }
+    .top-bar {
+      background: linear-gradient(to right, #1b1464, #d4145a);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      background-color: white;
+      color: black;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .participant-card {
+      border-radius: 8px;
+      text-align: center;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      background-color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .participant-card:hover {
+      transform: scale(1.03);
+    }
+
+    .participant-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .star-badge {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .star-badge::before {
+      content: "•";
+      color: orange;
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 150px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      padding-top: 55px;
+      padding-right: 138px;
+      
+    }
+
+    .star-text {
+      position: relative;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      z-index: 2;
+      padding-top: 78px;
+      padding-right: 140px;
+      text-align: center;
+
+      
+    }
+
+    .border-primary {
+    --bs-border-opacity: 1;
+    border-color: transparent !important;
+}
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div>☰</div>
+    <div style="background:white;color:black;padding:0.3rem 0.6rem;border-radius:50%;">NM</div>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="container text-center py-4" >
+    <div id="cabecalho">
+
+    </div>
+    
+    <div
+      id="participantes-lista"
+      class="row row-cols-3 g-4 justify-content-center border border-primary p-3"
+    >
+      <!-- Cards serão inseridos aqui -->
+    </div>
+  </div>
+
+  <script>
+
+
+        // Obtém a string de consulta da URL (ex: ?id=8)
+    const queryString = window.location.search;
+
+    // Cria um objeto para acessar os parâmetros da URL
+    const urlParams = new URLSearchParams(queryString);
+
+    // Pega o valor do parâmetro 'id'
+    const id = urlParams.get('id');
+
+    // Exibe o valor (ou usa em alguma lógica)
+    console.log('ID da URL:', id);
+
+    const lista = document.getElementById("participantes-lista");
+
+    const cabecalho = document.getElementById("cabecalho");
+
+
+  //   document.addEventListener('DOMContentLoaded', () => {
+  // // Tudo aqui será executado quando o HTML estiver totalmente carregado
+  //     console.log("Página carregada!");
+
+  //     location.reload();
+  //   });
+
+//   setTimeout(() => {
+//   location.reload();
+// }, 2000); // espera 2 segundos antes de recarregar
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   // Checa se já recarregou antes
+//   if (!localStorage.getItem('jaRecarregou')) {
+//     localStorage.setItem('jaRecarregou', 'true');
+//     location.reload();
+//   } else {
+//     // Se já recarregou antes, segue normalmente
+//     console.log('Página carregada normalmente (sem refresh)');
+//   }
+// });
+
+// window.onpageshow = function(event) {
+//   if (event.persisted) {
+//     // A página foi carregada do cache (usuário voltou)
+//     location.reload();
+//   }
+// };
+
+  window.addEventListener('load', function () {
+    if (sessionStorage.getItem('recarregarAoVoltar') === 'true') {
+      sessionStorage.removeItem('recarregarAoVoltar'); // impede recarregamento futuro
+      location.reload();
+    }
+  });
+
+
+
+    async function carregarParticipantes() {
+      try {
+        const resposta = await fetch(
+
+        
+          `http://localhost:8080/api/participantes/categoria/${id}`
+        );
+
+        if (!resposta.ok) {
+          throw new Error(`Erro na requisição: ${resposta.status}`);
+        }
+
+
+        const participantes = await resposta.json();
+
+        lista.innerHTML = ""; // Limpa lista
+
+        const texto = document.createElement("h5");
+        texto.className = "text-uppercase fw-bold text-warning mb-0";
+        texto.textContent = `CATEGORIA ${participantes[0].categoria.nome}`;
+        cabecalho.appendChild(texto);
+
+        const idadeInicialFinal = document.createElement("h6");
+        idadeInicialFinal.className = "text-uppercase fw-bold text-warning mb-4";
+        idadeInicialFinal.textContent = `${participantes[0].categoria.idadeInicial} À  ${participantes[0].categoria.idadeFinal} ANOS`;
+        cabecalho.appendChild(idadeInicialFinal);
+
+        participantes.forEach((p) => {
+
+          const col = document.createElement("div");
+          col.className = "col";
+
+          const card = document.createElement("div");
+          card.className = "participant-card";
+          card.onclick = () => {
+            window.location.href = `detalhes.html?id=${p.id}&categoria=${p.categoria.nome}`;
+          };
+
+          const img = document.createElement("img");
+          img.src = p.imagem ? `data:image/jpeg;base64,${p.imagem}` : 'https://via.placeholder.com/100';
+          img.alt = p.nome;
+
+          const nome = document.createElement("div");
+          nome.className = "mt-2 fw-medium";
+          nome.textContent = p.nome;
+
+          const star = document.createElement("div");
+          star.className = "star-badge";
+
+          const texto = document.createElement("div");
+          texto.className = "star-text";
+          texto.textContent = p.totalPontuacao ?? 0;
+          //texto.textContent = p.id ?? 0;
+        
+          star.appendChild(texto);
+
+          card.appendChild(img);
+          card.appendChild(star);
+          card.appendChild(nome);
+
+          col.appendChild(card);
+          lista.appendChild(col);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar participantes:", error);
+        lista.innerHTML =
+          '<p class="text-danger">Erro ao carregar participantes. Tente novamente mais tarde.</p>';
+      }
+    }
+
+    carregarParticipantes();
+  </script>
+</body>
+</html>

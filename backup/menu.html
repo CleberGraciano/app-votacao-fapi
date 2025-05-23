@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Avaliação</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+    }
+    #sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #343a40;
+      color: white;
+    }
+    #sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px;
+      display: block;
+    }
+    #sidebar a:hover {
+      background-color: #495057;
+    }
+    #content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Menu Lateral -->
+  <div id="sidebar">
+    <h4 class="p-3">Menu</h4>
+    <a href="#" onclick="mostrarPagina('participantes')">Cadastro de Participantes</a>
+    <a href="#" onclick="mostrarPagina('categorias')">Cadastro de Categorias</a>
+    <a href="#" onclick="mostrarPagina('avaliacoes')">Tipos de Avaliação</a>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div id="content">
+    <div id="participantes" class="pagina" style="display:none;">
+      <h2>Cadastro de Participantes</h2>
+      <!-- conteúdo ou include de formulário -->
+    </div>
+
+    <div id="categorias" class="pagina" style="display:none;">
+      <h2>Cadastro de Categorias</h2>
+      <!-- conteúdo ou include de formulário -->
+    </div>
+
+    <div id="avaliacoes" class="pagina" style="display:none;">
+      <h2>Tipos de Avaliação</h2>
+      <!-- conteúdo ou include de formulário -->
+    </div>
+  </div>
+
+  <script>
+    function mostrarPagina(paginaId) {
+      document.querySelectorAll('.pagina').forEach(div => div.style.display = 'none');
+      document.getElementById(paginaId).style.display = 'block';
+    }
+
+    // Mostrar a primeira página por padrão
+    mostrarPagina('participantes');
+  </script>
+
+</body>
+</html>

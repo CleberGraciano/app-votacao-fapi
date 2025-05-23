@@ -1,0 +1,48 @@
+<script>
+  const notasSelecionadas = {}; // Exemplo inicial (vazio)
+  const button = document.getElementById('enviar');
+
+  function verificarSePodeEnviar() {
+    const chavesNecessarias = [1, 2, 9, 10];
+    const podeEnviar = chavesNecessarias.every(chave => chave in notasSelecionadas);
+    button.disabled = !podeEnviar;
+  }
+
+  // Exemplo: simular seleção de uma nota
+  function selecionarNota(idCriterio, nota) {
+    notasSelecionadas[idCriterio] = nota;
+    verificarSePodeEnviar();
+  }
+
+  // Exemplo de uso (no clique de um div, por exemplo)
+  document.querySelectorAll('.nota').forEach(div => {
+    div.addEventListener('click', () => {
+      const idCriterio = parseInt(div.dataset.criterio); // exemplo: data-criterio="1"
+      const nota = parseInt(div.innerText);
+      
+      // Atualiza o objeto
+      notasSelecionadas[idCriterio] = nota;
+      
+      // Marcar visualmente como selecionado
+      const grupo = div.closest('.nota-grupo');
+      grupo.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
+      div.classList.add('selecionada');
+
+      verificarSePodeEnviar();
+    });
+  });
+
+  // Checagem inicial (se quiser carregar valores salvos)
+  verificarSePodeEnviar();
+</script>
+
+
+<div class="nota-grupo">
+  <div class="nota" data-criterio="1">5</div>
+  <div class="nota" data-criterio="1">6</div>
+  <div class="nota" data-criterio="1">10</div>
+</div>
+
+<!-- Repetir para critérios 2, 9 e 10 -->
+
+<button id="enviar" disabled>ENVIAR NOTAS</button>
